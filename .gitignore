@@ -1,0 +1,15 @@
+# ROS 2 / colcon build output
+build/
+install/
+log/
+
+# Python caches and local environments
+__pycache__/
+*.py[cod]
+.venv/
+
+# Local credentials and configuration
+.aws/
+.env
+.env.*
+!.env.example
