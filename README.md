@@ -26,6 +26,7 @@ World の保存済み地図を使った起動・初期位置指定・目標走�
 複数地点の走行と Jazzy の Waffle 設定修正は [ウェイポイント実習ノート](docs/09-waypoints.md)に記録する。
 走行中に現れる障害物の検出と Gazebo Harmonic での試し方は [動的障害物の学習ノート](docs/10-dynamic-obstacles.md)に記録する。
 House の保存地図を使った部屋巡回の課題と確認結果は [House ナビゲーション課題ノート](docs/11-house-navigation-activity.md)に記録する。
+Python で House を巡回する際の起動と検証は [House の Python 巡回手順](docs/25-house-python-patrol-verification.md)を参照する。
 Nav2 の全体経路、コストマップ、局所制御の役割は [Nav2 アーキテクチャの学習ノート](docs/12-nav2-architecture.md)に記録する。
 コストマップの余裕、更新周期、到着判定を調べる手順は [Nav2 パラメータの学習ノート](docs/13-nav2-parameters.md)に記録する。
 経路計算・追従が失敗したときの回復動作は [Nav2 回復動作の学習ノート](docs/14-nav2-recovery.md)に記録する。
@@ -33,6 +34,17 @@ Nav2 の全体経路、コストマップ、局所制御の役割は [Nav2 ア�
 講座で示された3枚の構成図の要点は [Nav2 の図解まとめ](docs/16-nav2-three-diagrams.md)に記録する。
 Gazebo Harmonic で間取り図から作る試作ワールドは [カスタムワールドの学習ノート](docs/17-custom-gazebo-world.md)に記録する。
 そのワールドへの家具の配置と起動方法は [物体配置の学習ノート](docs/18-custom-world-objects.md)に記録する。
+カスタムワールドでの Waffle の起動・移動と overlay の構成は [ロボット操作の学習ノート](docs/19-custom-world-turtlebot.md)に記録する。
+
+カスタムワールドの SLAM 地図作成から Nav2・ウェイポイント追従までの手順は [カスタムワールドの SLAM・ナビゲーション](docs/20-custom-world-slam-navigation.md)に記録する。
+
+5×5迷路の生成、入口配置、SLAM、Nav2 の実習手順は [迷路アクティビティ](docs/21-maze-activity.md)に記録する。
+
+独自ロボットを Nav2 につなぐときの TF と、講義の URDF を RViz で確認する手順は [独自ロボットの URDF と TF](docs/22-custom-robot-urdf-tf.md)に記録する。
+
+独自ロボットが Nav2 へ渡すデータと、速度指令を車輪に伝える方法は [オドメトリ・センサー・車体制御](docs/23-custom-robot-odometry-sensors-control.md)に記録する。
+
+SLAM Toolbox による地図作成と、保存地図を使う Nav2 の起動手順は [SLAM Toolbox と Nav2 の共通起動手順](docs/24-generic-slam-and-navigation.md)に記録する。
 
 ## このフォルダを ROS 2 ワークスペースとして使う
 
@@ -45,10 +57,16 @@ echo "$ROS_DISTRO"  # jazzy
 echo "$TURTLEBOT3_MODEL"  # waffle（TurtleBot3 の既定モデル）
 ```
 
-パッケージを追加した後は、フォルダ直下でビルドする。
+パッケージを追加した後は、ビルド用の新しいターミナルで underlay のみを読み込み、フォルダ直下でビルドする。この PC では CMake にシステム Python を明示する。
 
 ```bash
-colcon build --symlink-install --base-paths src
+source /opt/ros/jazzy/setup.bash
+colcon build --symlink-install --base-paths src --cmake-args -DPython3_EXECUTABLE=/usr/bin/python3
+```
+
+実行用の新しいターミナルで overlay を読み込む。
+
+```bash
 source ./setup.bash
 ```
 

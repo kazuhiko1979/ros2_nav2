@@ -5,6 +5,7 @@ from pathlib import Path
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import AppendEnvironmentVariable, DeclareLaunchArgument, IncludeLaunchDescription
+from launch.conditions import IfCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration
 
@@ -20,6 +21,7 @@ def generate_launch_description():
     x_pose = LaunchConfiguration("x_pose")
     y_pose = LaunchConfiguration("y_pose")
     use_sim_time = LaunchConfiguration("use_sim_time")
+    gui = LaunchConfiguration("gui")
     world_file = LaunchConfiguration("world_file")
 
     return LaunchDescription(
@@ -27,6 +29,7 @@ def generate_launch_description():
             DeclareLaunchArgument("x_pose", default_value="0.0"),
             DeclareLaunchArgument("y_pose", default_value="0.0"),
             DeclareLaunchArgument("use_sim_time", default_value="true"),
+            DeclareLaunchArgument("gui", default_value="true"),
             DeclareLaunchArgument("world_file", default_value=str(default_world)),
             AppendEnvironmentVariable("GZ_SIM_RESOURCE_PATH", str(turtlebot_share / "models")),
             IncludeLaunchDescription(
@@ -36,6 +39,7 @@ def generate_launch_description():
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(str(gazebo_launch)),
                 launch_arguments={"gz_args": "-g -v 2", "on_exit_shutdown": "true"}.items(),
+                condition=IfCondition(gui),
             ),
             IncludeLaunchDescription(
                 PythonLaunchDescriptionSource(str(turtlebot_launch / "robot_state_publisher.launch.py")),
